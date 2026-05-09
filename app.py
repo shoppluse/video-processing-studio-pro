@@ -140,8 +140,8 @@ feature = st.sidebar.radio(
         "🔄 Reverse Video",
         "🔇 Mute Video",
         "📸 Thumbnail Generator",
-        "🎨 Video Filter"
-        "🌐 Audio Language Converter",
+        "🎨 Video Filter",
+        "🌐 Audio Language Converter"
     ]
 )
 
