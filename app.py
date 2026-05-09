@@ -423,76 +423,74 @@ if uploaded_file is not None:
                     file_name="audio.mp3"
                 )
 
-   # =====================================================
-# VIDEO COMPRESSOR
-# =====================================================
+    # =====================================================
+    # VIDEO COMPRESSOR
+    # =====================================================
 
-elif feature == "📦 Video Compressor":
+    elif feature == "📦 Video Compressor":
 
-    st.header("📦 Video Compressor")
+        st.header("📦 Video Compressor")
 
-    quality = st.selectbox(
-        "Choose Compression Level",
-        ["Low", "Medium", "High"]
-    )
-
-    if st.button("⚡ Compress Video"):
-
-        output_path = "outputs/compressed.mp4"
-
-        original_size, compressed_size = compress_video(
-            upload_path,
-            output_path,
-            quality
+        quality = st.selectbox(
+            "Choose Compression Level",
+            ["Low", "Medium", "High"]
         )
 
-        # CONVERT BYTES TO MB
-        original_mb = original_size / (1024 * 1024)
-        compressed_mb = compressed_size / (1024 * 1024)
+        if st.button("⚡ Compress Video"):
 
-        # CALCULATE REDUCTION %
-        reduction = (
-            (original_size - compressed_size)
-            / original_size
-        ) * 100
+            output_path = "outputs/compressed.mp4"
 
-        st.success("✅ Video Compressed Successfully")
-
-        # VIDEO PREVIEW
-        st.video(output_path)
-
-        st.markdown("---")
-
-        # ANALYTICS
-        st.subheader("📊 Compression Analytics")
-
-        col1, col2, col3 = st.columns(3)
-
-        with col1:
-            st.metric(
-                "Original Size",
-                f"{original_mb:.2f} MB"
+            original_size, compressed_size = compress_video(
+                upload_path,
+                output_path,
+                quality
             )
 
-        with col2:
-            st.metric(
-                "Compressed Size",
-                f"{compressed_mb:.2f} MB"
-            )
+            # SIZE CONVERSION
+            original_mb = original_size / (1024 * 1024)
+            compressed_mb = compressed_size / (1024 * 1024)
 
-        with col3:
-            st.metric(
-                "Reduction",
-                f"{reduction:.1f}%"
-            )
+            # REDUCTION %
+            reduction = (
+                (original_size - compressed_size)
+                / original_size
+            ) * 100
 
-        # DOWNLOAD BUTTON
-        with open(output_path, "rb") as file:
-            st.download_button(
-                "⬇️ Download Compressed Video",
-                file,
-                file_name="compressed.mp4"
-            )
+            st.success("✅ Video Compressed Successfully")
+
+            # VIDEO PREVIEW
+            st.video(output_path)
+
+            st.markdown("---")
+
+            st.subheader("📊 Compression Analytics")
+
+            col1, col2, col3 = st.columns(3)
+
+            with col1:
+                st.metric(
+                    "Original Size",
+                    f"{original_mb:.2f} MB"
+                )
+
+            with col2:
+                st.metric(
+                    "Compressed Size",
+                    f"{compressed_mb:.2f} MB"
+                )
+
+            with col3:
+                st.metric(
+                    "Reduction",
+                    f"{reduction:.1f}%"
+                )
+
+            with open(output_path, "rb") as file:
+                st.download_button(
+                    "⬇️ Download Compressed Video",
+                    file,
+                    file_name="compressed.mp4"
+                )
 
     # =====================================================
     # WATERMARK TOOL
