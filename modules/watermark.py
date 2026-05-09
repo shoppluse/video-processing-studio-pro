@@ -1,23 +1,41 @@
-from moviepy.editor import VideoFileClip, TextClip, CompositeVideoClip
+import cv2
 
 def add_watermark(input_path, text, output_path):
 
-    video = VideoFileClip(input_path)
+    cap = cv2.VideoCapture(input_path)
 
-    watermark = TextClip(
-        text,
-        fontsize=30,
-        color='white'
-    ).set_duration(video.duration)
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    fps = int(cap.get(cv2.CAP_PROP_FPS))
 
-    watermark = watermark.set_pos(("right", "bottom"))
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
-    final = CompositeVideoClip([video, watermark])
-
-    final.write_videofile(
+    out = cv2.VideoWriter(
         output_path,
-        codec="libx264",
-        audio_codec="aac"
+        fourcc,
+        fps,
+        (width, height)
     )
 
-    video.close()
+    while True:
+
+        ret, frame = cap.read()
+
+        if not ret:
+            break
+
+        cv2.putText(
+            frame,
+            text,
+            (width - 250, height - 30),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            (255, 255, 255),
+            2,
+            cv2.LINE_AA
+        )
+
+        out.write(frame)
+
+    cap.release()
+    out.release()
