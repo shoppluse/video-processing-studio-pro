@@ -11,54 +11,68 @@ import os
 
 def convert_language(input_video, target_language, output_video):
 
-    # TEMP FILES
-    audio_path = "outputs/temp_audio.wav"
+    try:
 
-    translated_audio = "outputs/translated_audio.mp3"
+        # TEMP FILES
+        audio_path = "outputs/temp_audio.wav"
 
-    # EXTRACT AUDIO
-    video = VideoFileClip(input_video)
+        translated_audio = "outputs/translated_audio.mp3"
 
-    video.audio.write_audiofile(audio_path)
+        # EXTRACT AUDIO
+        video = VideoFileClip(input_video)
 
-    # SPEECH TO TEXT
-    recognizer = sr.Recognizer()
+        video.audio.write_audiofile(audio_path)
 
-    with sr.AudioFile(audio_path) as source:
+        # SPEECH RECOGNITION
+        recognizer = sr.Recognizer()
 
-        audio_data = recognizer.record(source)
+        with sr.AudioFile(audio_path) as source:
 
-        text = recognizer.recognize_google(audio_data)
+            audio_data = recognizer.record(source)
 
-    # TRANSLATE TEXT
-    translated_text = GoogleTranslator(
-        source='auto',
-        target=target_language
-    ).translate(text)
+            text = recognizer.recognize_google(audio_data)
 
-    # TEXT TO SPEECH
-    tts = gTTS(
-        text=translated_text,
-        lang=target_language
-    )
+        # TRANSLATION
+        translated_text = GoogleTranslator(
+            source='auto',
+            target=target_language
+        ).translate(text)
 
-    tts.save(translated_audio)
+        # TEXT TO SPEECH
+        tts = gTTS(
+            text=translated_text,
+            lang=target_language
+        )
 
-    # MERGE AUDIO WITH VIDEO
-    new_audio = AudioFileClip(translated_audio)
+        tts.save(translated_audio)
 
-    final_video = video.set_audio(new_audio)
+        # MERGE NEW AUDIO
+        new_audio = AudioFileClip(translated_audio)
 
-    final_video.write_videofile(
-        output_video,
-        codec="libx264",
-        audio_codec="aac"
-    )
+        final_video = video.set_audio(new_audio)
 
-    # CLEANUP
-    video.close()
-    new_audio.close()
+        final_video.write_videofile(
+            output_video,
+            codec="libx264",
+            audio_codec="aac"
+        )
 
-    os.remove(audio_path)
+        # CLEANUP
+        video.close()
+        new_audio.close()
 
-    return translated_text
+        os.remove(audio_path)
+
+        return translated_text, None
+
+    except sr.RequestError:
+
+        return None, "Speech recognition service unavailable."
+
+    except sr.UnknownValueError:
+
+        return None, "Could not understand audio clearly."
+
+    except Exception as e:
+
+        return None, str(e)
