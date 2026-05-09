@@ -1,0 +1,10 @@
+streamlit
+moviepy==1.0.3
+opencv-python-headless
+imageio
+imageio-ffmpeg
+numpy
+pillow
+decorator
+tqdm
+proglog
