@@ -20,7 +20,6 @@ def compress_video(input_path, output_path, quality):
 
     clip.close()
 
-    # FILE SIZE ANALYTICS
     original_size = os.path.getsize(input_path)
     compressed_size = os.path.getsize(output_path)
 
