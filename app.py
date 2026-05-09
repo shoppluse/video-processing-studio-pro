@@ -643,19 +643,25 @@ if uploaded_file is not None:
                 "French": "fr"
             }[language]
 
-            translated_text = convert_language(
+            translated_text, error = convert_language(
                 upload_path,
                 lang_code,
                 output_path
             )
 
-            st.success("✅ Language Converted Successfully")
+if error:
 
-            st.video(output_path)
+    st.error(error)
 
-            st.subheader("📝 Translated Text")
+else:
 
-            st.write(translated_text)
+    st.success("✅ Language Converted Successfully")
+
+    st.video(output_path)
+
+    st.subheader("📝 Translated Text")
+
+    st.write(translated_text)
 
             with open(output_path, "rb") as file:
                 st.download_button(
