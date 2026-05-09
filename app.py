@@ -15,6 +15,7 @@ from modules.reverse_video import reverse_video
 from modules.mute_video import mute_video
 from modules.thumbnail_generator import generate_thumbnail
 from modules.filters import apply_filter
+from modules.language_converter import convert_language
 
 # =====================================================
 # PAGE CONFIG
@@ -140,6 +141,7 @@ feature = st.sidebar.radio(
         "🔇 Mute Video",
         "📸 Thumbnail Generator",
         "🎨 Video Filter"
+        "🌐 Audio Language Converter",
     ]
 )
 
@@ -608,6 +610,58 @@ if uploaded_file is not None:
                     "⬇️ Download Thumbnail",
                     file,
                     file_name="thumbnail.jpg"
+                )
+
+        # =====================================================
+    # LANGUAGE CONVERTER
+    # =====================================================
+
+    elif feature == "🌐 Audio Language Converter":
+
+        st.header("🌐 Audio Language Converter")
+
+        language = st.selectbox(
+            "Select Target Language",
+            {
+                "Hindi": "hi",
+                "Kannada": "kn",
+                "Tamil": "ta",
+                "Telugu": "te",
+                "French": "fr"
+            }
+        )
+
+        if st.button("🎙️ Convert Language"):
+
+            output_path = "outputs/translated_video.mp4"
+
+            lang_code = {
+                "Hindi": "hi",
+                "Kannada": "kn",
+                "Tamil": "ta",
+                "Telugu": "te",
+                "French": "fr"
+            }[language]
+
+            translated_text = convert_language(
+                upload_path,
+                lang_code,
+                output_path
+            )
+
+            st.success("✅ Language Converted Successfully")
+
+            st.video(output_path)
+
+            st.subheader("📝 Translated Text")
+
+            st.write(translated_text)
+
+            with open(output_path, "rb") as file:
+                st.download_button(
+                    "⬇️ Download Translated Video",
+                    file,
+                    file_name="translated_video.mp4"
                 )
 
     # =====================================================
