@@ -612,7 +612,7 @@ if uploaded_file is not None:
                     file_name="thumbnail.jpg"
                 )
 
-        # =====================================================
+       # =====================================================
     # LANGUAGE CONVERTER
     # =====================================================
 
@@ -622,13 +622,13 @@ if uploaded_file is not None:
 
         language = st.selectbox(
             "Select Target Language",
-            {
-                "Hindi": "hi",
-                "Kannada": "kn",
-                "Tamil": "ta",
-                "Telugu": "te",
-                "French": "fr"
-            }
+            [
+                "Hindi",
+                "Kannada",
+                "Tamil",
+                "Telugu",
+                "French"
+            ]
         )
 
         if st.button("🎙️ Convert Language"):
@@ -649,26 +649,27 @@ if uploaded_file is not None:
                 output_path
             )
 
-if error:
+            if error:
 
-    st.error(error)
+                st.error(error)
 
-else:
+            else:
 
-    st.success("✅ Language Converted Successfully")
+                st.success("✅ Language Converted Successfully")
 
-    st.video(output_path)
+                st.video(output_path)
 
-    st.subheader("📝 Translated Text")
+                st.subheader("📝 Translated Text")
 
-    st.write(translated_text)
+                st.write(translated_text)
 
-            with open(output_path, "rb") as file:
-                st.download_button(
-                    "⬇️ Download Translated Video",
-                    file,
-                    file_name="translated_video.mp4"
-                )
+                with open(output_path, "rb") as file:
+
+                    st.download_button(
+                        "⬇️ Download Translated Video",
+                        file,
+                        file_name="translated_video.mp4"
+                    )
 
     # =====================================================
     # VIDEO FILTER
