@@ -15,7 +15,7 @@ from modules.reverse_video import reverse_video
 from modules.mute_video import mute_video
 from modules.thumbnail_generator import generate_thumbnail
 from modules.filters import apply_filter
-from modules.language_converter import convert_language
+from modules.language_converter import convert_text
 
 # =====================================================
 # PAGE CONFIG
@@ -612,13 +612,17 @@ if uploaded_file is not None:
                     file_name="thumbnail.jpg"
                 )
 
-       # =====================================================
+    # =====================================================
     # LANGUAGE CONVERTER
     # =====================================================
 
     elif feature == "🌐 Audio Language Converter":
 
-        st.header("🌐 Audio Language Converter")
+        st.header("🌐 Language Translator")
+
+        input_text = st.text_area(
+            "Enter Text To Translate"
+        )
 
         language = st.selectbox(
             "Select Target Language",
@@ -631,9 +635,7 @@ if uploaded_file is not None:
             ]
         )
 
-        if st.button("🎙️ Convert Language"):
-
-            output_path = "outputs/translated_video.mp4"
+        if st.button("🌍 Translate"):
 
             lang_code = {
                 "Hindi": "hi",
@@ -643,33 +645,16 @@ if uploaded_file is not None:
                 "French": "fr"
             }[language]
 
-            translated_text, error = convert_language(
-                upload_path,
-                lang_code,
-                output_path
+            translated_text = convert_text(
+                input_text,
+                lang_code
             )
 
-            if error:
+            st.success("✅ Translation Successful")
 
-                st.error(error)
+            st.subheader("📝 Translated Text")
 
-            else:
-
-                st.success("✅ Language Converted Successfully")
-
-                st.video(output_path)
-
-                st.subheader("📝 Translated Text")
-
-                st.write(translated_text)
-
-                with open(output_path, "rb") as file:
-
-                    st.download_button(
-                        "⬇️ Download Translated Video",
-                        file,
-                        file_name="translated_video.mp4"
-                    )
+            st.write(translated_text)
 
     # =====================================================
     # VIDEO FILTER
