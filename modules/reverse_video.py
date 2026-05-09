@@ -1,16 +1,38 @@
-from moviepy.editor import VideoFileClip
-import moviepy.video.fx.all as vfx
+import cv2
 
 def reverse_video(input_path, output_path):
 
-    clip = VideoFileClip(input_path)
+    cap = cv2.VideoCapture(input_path)
 
-    reversed_clip = clip.fx(vfx.time_mirror)
+    frames = []
 
-    reversed_clip.write_videofile(
+    fps = cap.get(cv2.CAP_PROP_FPS)
+
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+    while True:
+
+        ret, frame = cap.read()
+
+        if not ret:
+            break
+
+        frames.append(frame)
+
+    cap.release()
+
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+
+    out = cv2.VideoWriter(
         output_path,
-        codec="libx264",
-        audio_codec="aac"
+        fourcc,
+        fps,
+        (width, height)
     )
 
-    clip.close()
+    for frame in reversed(frames):
+
+        out.write(frame)
+
+    out.release()
