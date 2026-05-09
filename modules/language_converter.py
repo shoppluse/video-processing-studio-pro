@@ -1,6 +1,6 @@
 import speech_recognition as sr
 
-from googletrans import Translator
+from deep_translator import GoogleTranslator
 
 from gtts import gTTS
 
@@ -31,14 +31,10 @@ def convert_language(input_video, target_language, output_video):
         text = recognizer.recognize_google(audio_data)
 
     # TRANSLATE TEXT
-    translator = Translator()
-
-    translated = translator.translate(
-        text,
-        dest=target_language
-    )
-
-    translated_text = translated.text
+    translated_text = GoogleTranslator(
+        source='auto',
+        target=target_language
+    ).translate(text)
 
     # TEXT TO SPEECH
     tts = gTTS(
@@ -48,7 +44,7 @@ def convert_language(input_video, target_language, output_video):
 
     tts.save(translated_audio)
 
-    # MERGE NEW AUDIO WITH VIDEO
+    # MERGE AUDIO WITH VIDEO
     new_audio = AudioFileClip(translated_audio)
 
     final_video = video.set_audio(new_audio)
