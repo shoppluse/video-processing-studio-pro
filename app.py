@@ -142,7 +142,7 @@ feature = st.sidebar.radio(
         "🔇 Mute Video",
         "📸 Thumbnail Generator",
         "🎨 Video Filter",
-        "📥 Instagram Downloader",
+        "📥 Instagram Reel Downloader",
         "🌐 Audio Language Converter"
     ]
 )
@@ -685,47 +685,56 @@ if uploaded_file is not None:
                     file,
                     file_name="filtered.mp4"
                 )
-        # =====================================================
-    # INSTAGRAM DOWNLOADER
+    # =====================================================
+    # INSTAGRAM REEL DOWNLOADER
     # =====================================================
 
-    elif feature == "📥 Instagram Downloader":
+    elif feature == "📥 Instagram Reel Downloader":
 
         st.header("📥 Instagram Reel Downloader")
 
+        st.markdown(
+            "Paste a public Instagram reel link to download the video."
+        )
+
         reel_url = st.text_input(
-            "Paste Instagram Reel URL"
+            "🔗 Paste Instagram Reel URL"
         )
 
         if st.button("⬇️ Download Reel"):
 
-            output_path = "outputs/instagram_video.mp4"
+            if reel_url == "":
 
-            try:
+                st.warning("Please paste a reel URL.")
 
-                download_instagram_video(
-                    reel_url,
-                    output_path
-                )
+            else:
 
-                st.success("✅ Reel Downloaded Successfully")
+                try:
 
-                st.video(output_path)
+                    with st.spinner("Downloading reel..."):
 
-                with open(output_path, "rb") as file:
+                        downloaded_file = download_instagram_video(
+                            reel_url
+                        )
 
-                    st.download_button(
-                        "⬇️ Download Reel",
-                        file,
-                        file_name="instagram_reel.mp4"
+                    st.success("✅ Reel Downloaded Successfully")
+
+                    st.video(downloaded_file)
+
+                    with open(downloaded_file, "rb") as file:
+
+                        st.download_button(
+                            "⬇️ Save Reel",
+                            file,
+                            file_name="instagram_reel.mp4"
+                        )
+
+                except Exception:
+
+                    st.error(
+                        "Failed to download reel. "
+                        "Make sure the reel is public."
                     )
-
-            except Exception as e:
-
-                st.error(
-                    "Failed to download reel. "
-                    "Make sure the reel is public."
-                )
 
 else:
 
