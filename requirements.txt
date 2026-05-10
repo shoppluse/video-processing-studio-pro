@@ -12,3 +12,4 @@ SpeechRecognition
 deep-translator
 gtts
 pydub
+yt-dlp
