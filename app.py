@@ -16,6 +16,7 @@ from modules.mute_video import mute_video
 from modules.thumbnail_generator import generate_thumbnail
 from modules.filters import apply_filter
 from modules.language_converter import convert_text
+from modules.instagram_downloader import download_instagram_video
 
 # =====================================================
 # PAGE CONFIG
@@ -141,6 +142,7 @@ feature = st.sidebar.radio(
         "🔇 Mute Video",
         "📸 Thumbnail Generator",
         "🎨 Video Filter",
+        "📥 Instagram Downloader",
         "🌐 Audio Language Converter"
     ]
 )
@@ -682,6 +684,47 @@ if uploaded_file is not None:
                     "⬇️ Download Video",
                     file,
                     file_name="filtered.mp4"
+                )
+        # =====================================================
+    # INSTAGRAM DOWNLOADER
+    # =====================================================
+
+    elif feature == "📥 Instagram Downloader":
+
+        st.header("📥 Instagram Reel Downloader")
+
+        reel_url = st.text_input(
+            "Paste Instagram Reel URL"
+        )
+
+        if st.button("⬇️ Download Reel"):
+
+            output_path = "outputs/instagram_video.mp4"
+
+            try:
+
+                download_instagram_video(
+                    reel_url,
+                    output_path
+                )
+
+                st.success("✅ Reel Downloaded Successfully")
+
+                st.video(output_path)
+
+                with open(output_path, "rb") as file:
+
+                    st.download_button(
+                        "⬇️ Download Reel",
+                        file,
+                        file_name="instagram_reel.mp4"
+                    )
+
+            except Exception as e:
+
+                st.error(
+                    "Failed to download reel. "
+                    "Make sure the reel is public."
                 )
 
 else:
